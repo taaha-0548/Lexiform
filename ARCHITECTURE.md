@@ -29,3 +29,12 @@ This document describes the formal phases of the Lexiform compiler, implemented 
 - **Method:** AST-to-JSON Mapping.
 - **Target:** Framework-agnostic JSON Schema.
 - **Process:** Translates the validated AST into the final JSON format using the `nlohmann/json` library.
+
+## 5. WebAssembly & JavaScript Layer (The Bridge)
+**File:** `WasmBindings.cpp` / `packages/lexiform-js/`
+- **Goal:** Browser & Runtime Portability.
+- **Method:** Emscripten Compilation & JS Glue Code.
+- **Process:** 
+  - The C++ core is compiled to **WebAssembly (WASM)** using `emcc`.
+  - Emscripten generates a **JavaScript Glue Module** (`lexiform.js`) that handles WASM instantiation and memory management.
+  - The `@lexiform/js` package provides a clean TypeScript wrapper (`LexiformEngine`) and a React hook (`useLexiform`) around this module, allowing the C++ compiler to run directly in the browser.

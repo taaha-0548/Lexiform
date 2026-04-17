@@ -1,6 +1,6 @@
 {
   "name": "lexiform",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Developer-first DSL for building and validating cross-platform forms.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -11,7 +11,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./lexiform.js": "./dist/lexiform.js"
   },
   "files": [
     "dist"
@@ -28,7 +29,11 @@
     "dsl",
     "forms",
     "compiler",
-    "validation"
+    "validation",
+    "webassembly",
+    "wasm",
+    "react",
+    "typescript"
   ],
   "author": "Lexiform Contributors",
   "license": "MIT",

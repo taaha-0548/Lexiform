@@ -1,110 +1,145 @@
-# Lexiform
+# Lexiform JS Core
+**A developer-first markup language for defining web forms.**
 
-**A developer-first Domain Specific Language (DSL) for building and validating cross-platform forms.**
+Lexiform treats form creation like document compilation. Instead of wrestling with slow drag-and-drop builders or writing error-prone JSON configurations by hand, you write clean, human-readable markup. The Lexiform compiler strictly enforces structural correctness, validates field semantics, and outputs a highly portable, framework-agnostic JSON schema ready to be rendered by React, Next.js, Vue, or plain HTML.
 
-Lexiform allows you to define complex form structures, validation rules, and UI hierarchies in a simple, human-readable format. Our compiler then translates these .form scripts into framework-agnostic JSON schemas that power your frontends.
+### About this Package
+This package provides the official JavaScript and TypeScript bindings for the **Lexiform C++ Core Compiler**. By leveraging WebAssembly (WASM), it allows you to run the exact same high-performance parsing and semantic analysis logic directly in the browser or Node.js environment, with zero backend required.
 
----
+## Why Lexiform?
 
-## Key Features
+Traditional form builders often force you to choose between human-readable definitions and complex validation logic. Lexiform bridges this gap by providing:
+- **Unified Logic:** Use the exact same C++ compiler engine for your CLI tools and your web browser.
+- **Extreme Performance:** Offload complex parsing and semantic analysis to WebAssembly with an ultra-lightweight, zero-dependency payload.
+- **Semantic Safety:** Catch errors (like duplicate IDs or invalid attribute combinations) *before* your form even renders.
+- **Zero Framework Lock-in:** The DSL compiles to a standard JSON schema that you can render however you like.
 
-*   **Custom DSL:** Define forms with a simple, keyword-based syntax.
-*   **High Performance:** C++ compiler for rapid translation and semantic analysis.
-*   **Shared Engine:** A cross-platform TypeScript library (LexiformEngine) for real-time frontend validation.
-*   **Framework Agnostic:** Compiles to standard JSON that works with React, Vue, Angular, and more.
-*   **Semantic Validation:** Catches duplicate IDs and attribute mismatches at compile time.
+### Real-World Use Cases
 
----
+- **Version-Controllable Form Definitions:** Unlike drag-and-drop builders, Lexiform `.form` files live directly in your Git repository. This makes forms **version-controllable, diffable, and code-review friendly**.
+- **Cross-Framework Portability:** Write a Job Application form once in Lexiform and render it across a React website, an Angular admin panel, or even a legacy HTML app.
+- **Rapid Prototyping:** For power users and engineers, writing a quick Lexiform script is significantly faster than dragging fields onto a GUI canvas.
+- **Safer than Raw JSON:** Stop hand-writing massive, error-prone JSON files. Lexiform replaces manual JSON with a clean markup language, while the compiler enforces strict semantic checks.
 
-## Monorepo Structure
+## Features
 
--   `src/`: Core C++ Compiler logic (Lexer, Parser, Semantic Analyzer).
--   `packages/lexiform-js/`: The NPM package providing JS/TS bindings for the C++ core via WebAssembly.
--   `frontend/`: A React demo application using the library.
--   `include/`: C++ Header files.
--   `tests/`: Test suites for both C++ and JS.
+**Keywords:** `Lexiform`, `DSL`, `Forms`, `Compiler`, `Validation`, `WebAssembly`, `WASM`, `React`, `TypeScript`
 
-## Build and Development
+- **C++ Performance:** Powered by the native C++ Lexer, Parser, and Semantic Analyzer.
+- **WebAssembly Powered:** Compiled to WebAssembly for near-native speed with a minimal footprint.
+- **Type Safe:** Full TypeScript support for Schemas and Data.
+- **React Ready:** Includes a specialized hook for seamless, asynchronous integration.
 
-We use a unified build system. Ensure you have a C++ compiler and Emscripten installed.
+## Installation
 
-### 1. Build Everything
-From the root directory:
-```bash
-npm run build
-```
-This will compile the C++ core to WASM, build the JS library, and bundle the frontend.
-
-### 2. Specific Build Tasks
--   **Build C++ CLI:** `npm run build:core`
--   **Build WASM Bridge:** `npm run build:wasm`
--   **Build JS Library:** `npm run build:js`
--   **Run Frontend Dev:** `npm run dev:frontend`
-
----
-
-## Frontend Integration (The NPM Package)
-
-You can now use the high-performance C++ compiler directly in your frontend apps via the lexiform package.
-
-### 1. Installation
 ```bash
 npm install lexiform
 ```
 
-### 2. Usage with React
+## Usage
+
+### Using the React Hook
+
+The easiest way to use Lexiform in a React application is the `useLexiform` hook. It handles the asynchronous loading of the WebAssembly module automatically.
+
 ```tsx
 import { useLexiform } from 'lexiform';
 
 const source = `
-  FORM "Signup" signup-id
-  TEXT "Name" user [REQUIRED]
-  SUBMIT "Go"
+  FORM "Newsletter" news-id
+  SECTION "Subscriber Details"
+    EMAIL "Your Email" email [REQUIRED]
+  SUBMIT "Join"
   END
 `;
 
 function App() {
-  const { schema, isReady } = useLexiform(source);
+  const { schema, isReady, compilerError } = useLexiform(source);
+
   if (!isReady) return <div>Loading C++ Engine...</div>;
-  return <h1>{schema.title}</h1>;
+  if (compilerError) return <div>Error: {compilerError}</div>;
+
+  return (
+    <form>
+      <h1>{schema.title}</h1>
+      {schema.sections.map((section) => (
+         <fieldset key={section.title}>
+            <legend>{section.title}</legend>
+            {section.fields.map((field) => (
+               <input
+                 key={field.id}
+                 type={field.type}
+                 placeholder={field.label}
+                 required={Boolean(field.REQUIRED)}
+               />
+            ))}
+         </fieldset>
+      ))}
+      <button type="submit">{schema.submit.label}</button>
+    </form>
+  );
 }
 ```
 
----
+### Direct Engine Usage
+
+For non-React environments (Node.js, Vue, Svelte, or Vanilla JS), you can use the `LexiformEngine` directly.
+
+```typescript
+import { LexiformEngine } from 'lexiform';
+
+async function compileForm(mySourceString: string) {
+  // 1. Initialize the WASM module
+  await LexiformEngine.initWasm();
+
+  // 2. Parse the source string into a JSON Schema
+  const schema = LexiformEngine.parse(mySourceString);
+
+  // 3. Validate user data against the generated schema
+  const errors = LexiformEngine.validate(schema, { email: 'invalid-email' });
+  return { schema, errors };
+}
+```
+
+## Architecture & JS Module Usage
+
+Lexiform JS is a hybrid package that bridges a TypeScript API with a high-performance C++ core. It consists of:
+
+1. **TypeScript Distribution** (`dist/`): The high-level JS API you interact with.
+2. **JS Module Glue Code** (`lexiform.js`): An ES Module generated by Emscripten that manages the WASM lifecycle, memory, and function exports.
+3. **WebAssembly Binary** (`lexiform.wasm`): The compiled C++ core containing the Lexer, Parser, and Analyzer.
+
+### How it Works
+
+When `initWasm()` is called, the library dynamically imports the `lexiform.js` module. This module then fetches and instantiates the `lexiform.wasm` binary. All semantic analysis and form compilation is performed inside the WASM environment, ensuring parity with the C++ CLI tool.
+
+## Advanced: Custom WASM Loading
+
+If you are using a bundler that requires specific handling for WASM files (or if you want to host the WASM file on a custom CDN), you can provide a custom `moduleLoader`.
+
+```typescript
+import { LexiformEngine } from 'lexiform';
+import lexiformModuleFactory from 'lexiform/dist/lexiform.js';
+
+async function customInit() {
+  await LexiformEngine.initWasm(async () => {
+    // Manually initialize the Emscripten module factory
+    return await lexiformModuleFactory();
+  });
+}
+```
+
+This also works directly with the `useLexiform` hook:
+
+```tsx
+const { schema } = useLexiform(source, async () => {
+  return await lexiformModuleFactory();
+});
+```
 
 ## NPM Registry
-View the official package here: [https://www.npmjs.com/package/lexiform](https://www.npmjs.com/package/lexiform)
-
----
-
-## NPM Publishing
-
-To publish the library to the NPM registry:
-
-1.  Rebuild the assets: `npm run build:wasm && npm run build:js`
-2.  Navigate to the package: `cd packages/lexiform-js`
-3.  Publish: `npm publish`
-
----
-
-## DSL Syntax Guide
-
-| Keyword | Description | Example |
-| :--- | :--- | :--- |
-| FORM | Starts a form definition. | FORM "Title" id |
-| SECTION | Group fields together. | SECTION "Details" |
-| TEXT | Standard text input. | TEXT "Label" id |
-| TEXTAREA | Multi-line input. | TEXTAREA "Bio" id |
-| DROPDOWN | Selection menu. | DROPDOWN "Tag" id [OPTIONS=["A", "B"]] |
-| REQUIRED | Marks a field as mandatory. | [REQUIRED] |
-| MAX_WORDS | Limit for textareas. | [MAX_WORDS=500] |
-| SUBMIT | Define the submit button. | SUBMIT "Text" |
-| END | Marks the end of the form. | END |
-
----
-
-## Contributing
-We welcome contributions! Please feel free to submit a Pull Request.
+View the official package here: https://www.npmjs.com/package/lexiform
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+
+MIT
