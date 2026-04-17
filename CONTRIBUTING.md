@@ -1,4 +1,4 @@
-# Contributing to FormScript
+# Contributing to Lexiform
 
 First off, thanks for taking the time to contribute! 🎉
 
@@ -17,7 +17,7 @@ First off, thanks for taking the time to contribute! 🎉
 5.  **Important:** Run the test suites!
     *   Full suite: `npm test`
     *   Compiler tests: `node tests/test_runner.js`
-    *   Engine tests: `npm test -w packages/formscript-js`
+    *   Engine tests: `npm test -w packages/Lexiform-js`
 5.  Commit your changes (`git commit -m 'Add amazing feature'`).
 6.  Push to the branch (`git push origin feature/amazing-feature`).
 7.  Open a Pull Request.

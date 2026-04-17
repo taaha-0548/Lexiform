@@ -19,10 +19,10 @@ npm install lexiform
 
 ### Using the React Hook
 
-The easiest way to use FormScript in a React application is the `useFormScript` hook. It handles the asynchronous loading of the WebAssembly module automatically.
+The easiest way to use Lexiform in a React application is the `useLexiform` hook. It handles the asynchronous loading of the WebAssembly module automatically.
 
 ```tsx
-import { useFormScript } from 'lexiform';
+import { useLexiform } from 'lexiform';
 
 const source = `
   FORM "Newsletter" news-id
@@ -33,7 +33,7 @@ const source = `
 `;
 
 function App() {
-  const { schema, isReady, compilerError } = useFormScript(source);
+  const { schema, isReady, compilerError } = useLexiform(source);
 
   if (!isReady) return <div>Loading C++ Engine...</div>;
   if (compilerError) return <div>Error: {compilerError}</div>;
@@ -49,20 +49,20 @@ function App() {
 
 ### Direct Engine Usage
 
-For non-React environments, you can use the `FormScriptEngine` directly.
+For non-React environments, you can use the `LexiformEngine` directly.
 
 ```typescript
-import { FormScriptEngine } from 'lexiform';
+import { LexiformEngine } from 'lexiform';
 
 async function compileForm() {
   // 1. Initialize the WASM module
-  await FormScriptEngine.initWasm();
+  await LexiformEngine.initWasm();
 
   // 2. Parse the source string into a JSON Schema
-  const schema = FormScriptEngine.parse(mySourceString);
+  const schema = LexiformEngine.parse(mySourceString);
   
   // 3. Validate user data
-  const errors = FormScriptEngine.validate(schema, { email: "invalid-email" });
+  const errors = LexiformEngine.validate(schema, { email: "invalid-email" });
 }
 ```
 

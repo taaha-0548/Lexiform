@@ -7,11 +7,11 @@
   ],
   "scripts": {
     "build:core": "cd build && cmake .. && cmake --build .",
-    "build:wasm": "mkdir -p packages/formscript-js/src/wasm && cd build && emcmake cmake .. && emmake make && cp formscript.{js,wasm} ../packages/formscript-js/src/wasm/",
-    "build:js": "npm run build -w packages/formscript-js",
+    "build:wasm": "mkdir -p packages/lexiform-js/src/wasm && cd build && emcmake cmake .. && emmake make && cp lexiform.{js,wasm} ../packages/lexiform-js/src/wasm/",
+    "build:js": "npm run build -w packages/lexiform-js",
     "build:frontend": "npm run build -w frontend",
     "build": "npm run build:wasm && npm run build:js && npm run build:frontend",
     "dev:frontend": "npm run dev -w frontend",
-    "test": "npm test -w packages/formscript-js"
+    "test": "npm test -w packages/lexiform-js"
   }
 }

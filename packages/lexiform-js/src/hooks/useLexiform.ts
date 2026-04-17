@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
-import { FormScriptEngine } from '../core/engine';
+import { LexiformEngine } from '../core/engine';
 import { FormSchema, FormDataValue } from '../core/types';
 
 /**
- * THE HOOK: The standard way for React developers to use FormScript's WebAssembly Compiler.
+ * THE HOOK: The standard way for React developers to use Lexiform's WebAssembly Compiler.
  */
-export function useFormScript(formScriptSource: string, moduleLoader?: () => Promise<any>) {
+export function useLexiform(LexiformSource: string, moduleLoader?: () => Promise<any>) {
   const [data, setData] = useState<Record<string, FormDataValue>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [schema, setSchema] = useState<FormSchema | null>(null);
@@ -18,11 +18,11 @@ export function useFormScript(formScriptSource: string, moduleLoader?: () => Pro
     
     const initAndCompile = async () => {
       try {
-        await FormScriptEngine.initWasm(moduleLoader);
+        await LexiformEngine.initWasm(moduleLoader);
         
         if (isMounted) {
           setIsReady(true);
-          const generatedSchema = FormScriptEngine.parse(formScriptSource);
+          const generatedSchema = LexiformEngine.parse(LexiformSource);
           setSchema(generatedSchema);
           setCompilerError(null);
         }
@@ -37,7 +37,7 @@ export function useFormScript(formScriptSource: string, moduleLoader?: () => Pro
     initAndCompile();
 
     return () => { isMounted = false; };
-  }, [formScriptSource, moduleLoader]);
+  }, [LexiformSource, moduleLoader]);
 
   const handleChange = (id: string, value: FormDataValue) => {
     setData(prev => ({ ...prev, [id]: value }));
@@ -52,7 +52,7 @@ export function useFormScript(formScriptSource: string, moduleLoader?: () => Pro
 
   const validate = () => {
     if (!schema) return false;
-    const newErrors = FormScriptEngine.validate(schema, data);
+    const newErrors = LexiformEngine.validate(schema, data);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

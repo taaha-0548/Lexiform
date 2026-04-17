@@ -47,7 +47,7 @@ json generateJson(const FormNode& form) {
 }
 
 int main(int argc, char** argv) {
-    CLI::App app{"FormScript Compiler: Compiles .form files to structured JSON schema."};
+    CLI::App app{"Lexiform Compiler: Compiles .form files to structured JSON schema."};
 
     std::string input_file;
     std::string output_file = "output.json";

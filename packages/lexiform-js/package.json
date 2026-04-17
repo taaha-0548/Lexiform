@@ -25,22 +25,22 @@
     "test": "vitest run"
   },
   "keywords": [
-    "formscript",
+    "Lexiform",
     "dsl",
     "forms",
     "compiler",
     "validation"
   ],
-  "author": "FormScript Contributors",
+  "author": "Lexiform Contributors",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/lexiform.git"
+    "url": "https://github.com/taaha-0548/Lexiform.git"
   },
   "bugs": {
-    "url": "https://github.com/your-username/lexiform/issues"
+    "url": "https://github.com/taaha-0548/Lexiform/issues"
   },
-  "homepage": "https://github.com/your-username/lexiform#readme",
+  "homepage": "https://github.com/taaha-0548/Lexiform#readme",
   "devDependencies": {
     "typescript": "^5.0.0",
     "tsup": "^8.0.0",

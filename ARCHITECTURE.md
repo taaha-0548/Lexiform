@@ -12,7 +12,7 @@ This document describes the formal phases of the Lexiform compiler, implemented 
 **File:** `Parser.cpp` / `Parser.hpp`
 - **Goal:** Hierarchical structure validation.
 - **Method:** Recursive Descent (Top-Down Parsing).
-- **Process:** Consumes tokens and builds a tree-like structure (AST) based on the FormScript grammar. It enforces the `FORM -> SECTION -> FIELD` hierarchy.
+- **Process:** Consumes tokens and builds a tree-like structure (AST) based on the Lexiform grammar. It enforces the `FORM -> SECTION -> FIELD` hierarchy.
 
 ## 3. Semantic Analysis (The "Brain")
 **File:** `SemanticAnalyzer.cpp` / `SemanticAnalyzer.hpp`

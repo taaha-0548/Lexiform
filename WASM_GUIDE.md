@@ -1,8 +1,8 @@
-# Using FormScript C++ Core in the Browser (WebAssembly)
+# Using Lexiform C++ Core in the Browser (WebAssembly)
 
-FormScript provides a high-performance C++ compiler for semantic analysis and code generation. To bring this exact same, rigorous C++ logic to your frontend frameworks (React, Vue, Svelte), we compile the C++ core into **WebAssembly (WASM)**.
+Lexiform provides a high-performance C++ compiler for semantic analysis and code generation. To bring this exact same, rigorous C++ logic to your frontend frameworks (React, Vue, Svelte), we compile the C++ core into **WebAssembly (WASM)**.
 
-This ensures that the JavaScript library `@formscript/core` is not just recreating the logic in TypeScript, but is actually running the **real C++ compiler** under the hood inside the user's browser.
+This ensures that the JavaScript library `@Lexiform/core` is not just recreating the logic in TypeScript, but is actually running the **real C++ compiler** under the hood inside the user's browser.
 
 ---
 
@@ -17,8 +17,8 @@ npm run build:wasm
 This will:
 1.  Initialize the CMake build for WebAssembly.
 2.  Compile the C++ source files using `emcc`.
-3.  Generate `formscript.js` and `formscript.wasm`.
-4.  Automatically move them to `packages/formscript-js/src/wasm/` for bundling.
+3.  Generate `Lexiform.js` and `Lexiform.wasm`.
+4.  Automatically move them to `packages/Lexiform-js/src/wasm/` for bundling.
 
 ---
 
@@ -27,15 +27,15 @@ This will:
 Users can now simply install the library:
 
 ```bash
-npm install @formscript/core
+npm install @Lexiform/core
 ```
 
 And use the provided React hook:
 
 ```tsx
-import { useFormScript } from 'formscript';
+import { useLexiform } from 'Lexiform';
 
-const { schema, isReady } = useFormScript(source);
+const { schema, isReady } = useLexiform(source);
 ```
 
 ### **Under the Hood (Library Architecture)**
@@ -57,13 +57,13 @@ As a frontend developer using React, you don't need to worry about the C++ memor
 
 ### **Installation**
 ```bash
-npm install @formscript/core
+npm install @Lexiform/core
 ```
 
 ### **React Example**
 ```tsx
 import React from 'react';
-import { useFormScript } from '@formscript/core';
+import { useLexiform } from '@Lexiform/core';
 
 const formSource = `
   FORM "Signup" sign-up
@@ -74,7 +74,7 @@ const formSource = `
 
 export default function App() {
   // The hook automatically initializes the C++ Wasm compiler!
-  const { schema, isReady, error } = useFormScript(formSource);
+  const { schema, isReady, error } = useLexiform(formSource);
 
   if (!isReady) return <div>Loading C++ Compiler Engine...</div>;
   if (error) return <div className="error">{error}</div>;
@@ -89,4 +89,4 @@ export default function App() {
 }
 ```
 
-By leveraging WebAssembly, FormScript guarantees **100% feature parity** and identical validation behavior between the CLI backend tool and the frontend browser rendering!
+By leveraging WebAssembly, Lexiform guarantees **100% feature parity** and identical validation behavior between the CLI backend tool and the frontend browser rendering!

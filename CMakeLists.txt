@@ -16,25 +16,25 @@ set(CORE_SOURCES
 
 if (EMSCRIPTEN)
     # Build WebAssembly module for the JS frontend
-    add_executable(formscript_wasm src/WasmBindings.cpp ${CORE_SOURCES})
+    add_executable(lexiform_wasm src/WasmBindings.cpp ${CORE_SOURCES})
     
-    set_target_properties(formscript_wasm PROPERTIES 
-        OUTPUT_NAME "formscript"
+    set_target_properties(lexiform_wasm PROPERTIES 
+        OUTPUT_NAME "lexiform"
         SUFFIX ".js"
     )
     
     # Emscripten specific flags for WASM and Embind
-    target_link_options(formscript_wasm PRIVATE 
+    target_link_options(lexiform_wasm PRIVATE 
         "--bind" 
-        "-s" "WASM=1" 
-        "-s" "MODULARIZE=1" 
-        "-s" "EXPORT_ES6=1" 
-        "-s" "EXPORT_NAME='createFormScriptModule'"
-        "-s" "ALLOW_MEMORY_GROWTH=1"
+        "-sWASM=1" 
+        "-sMODULARIZE=1" 
+        "-sEXPORT_ES6=1" 
+        "-sEXPORT_NAME='createLexiformModule'"
+        "-sALLOW_MEMORY_GROWTH=1"
         "-O3"
     )
 else()
     # Standard CLI compiler
-    add_executable(formscript src/main.cpp ${CORE_SOURCES})
-    install(TARGETS formscript DESTINATION bin)
+    add_executable(lexiform src/main.cpp ${CORE_SOURCES})
+    install(TARGETS lexiform DESTINATION bin)
 endif()

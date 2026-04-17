@@ -1,13 +1,13 @@
 import { FormSchema, FormDataValue } from './types';
 
 // Declare the Emscripten module interface
-interface FormScriptWasmModule {
+interface LexiformWasmModule {
   compileToSchema: (source: string) => string;
 }
 
-let wasmModuleInstance: FormScriptWasmModule | null = null;
+let wasmModuleInstance: LexiformWasmModule | null = null;
 
-export class FormScriptEngine {
+export class LexiformEngine {
   /**
    * Initialize the WebAssembly module built from the C++ Core Compiler.
    * This MUST be called before using parse().
@@ -21,24 +21,24 @@ export class FormScriptEngine {
       } else {
         // Dynamic import for the pre-built WASM glue code
         // We use 'as any' to bypass TS check for missing file during dev
-        const moduleFactory = (await import('../wasm/formscript.js' as any)).default;
+        const moduleFactory = (await import('../wasm/lexiform.js' as any)).default;
         wasmModuleInstance = await moduleFactory();
       }
-      console.log("FormScript C++ Engine (WASM) initialized successfully.");
+      console.log("Lexiform C++ Engine (WASM) initialized successfully.");
     } catch (e) {
-      console.error("CRITICAL: Failed to load FormScript C++ WebAssembly module.", e);
-      console.error("Ensure that 'formscript.wasm' is available in the same directory as the JS bundle.");
-      throw new Error("FormScript WASM Initialization Failed. The C++ core could not be loaded.");
+      console.error("CRITICAL: Failed to load Lexiform C++ WebAssembly module.", e);
+      console.error("Ensure that 'lexiform.wasm' is available in the same directory as the JS bundle.");
+      throw new Error("Lexiform WASM Initialization Failed. The C++ core could not be loaded.");
     }
   }
 
   /**
-   * Passes the raw FormScript string to the C++ Compiler in WebAssembly memory.
+   * Passes the raw Lexiform string to the C++ Compiler in WebAssembly memory.
    * The C++ Core handles Lexical Analysis, Parsing, and Semantic Analysis.
    */
   static parse(source: string): FormSchema {
     if (!wasmModuleInstance) {
-      throw new Error("FormScriptEngine not initialized. Call initWasm() first.");
+      throw new Error("LexiformEngine not initialized. Call initWasm() first.");
     }
 
     // Call the C++ function exported via Embind

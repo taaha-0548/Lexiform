@@ -1,9 +1,9 @@
-# FormScript Compiler: Comprehensive C++ Implementation Roadmap
+# Lexiform Compiler: Comprehensive C++ Implementation Roadmap
 
 **Project Theme:** Document Compilation DSL
 **Language Concept:** A developer-first markup language that compiles into a structured, framework-agnostic JSON schema [cite: 8, 9].
 
-This roadmap provides a detailed, step-by-step guide to building the FormScript compiler using modern C++ tools.
+This roadmap provides a detailed, step-by-step guide to building the Lexiform compiler using modern C++ tools.
 
 ---
 
@@ -15,7 +15,7 @@ Before writing compiler logic, you need a solid foundation to handle files and i
     * Target C++17 or C++20 to take advantage of modern features like `std::variant`, `std::optional`, and string views.
 2.  **Command-Line Interface (CLI11):**
     * Include the header-only `CLI11` library.
-    * Define your compiler's entry point: `formscript <input.form> -o <output.json>`.
+    * Define your compiler's entry point: `Lexiform <input.form> -o <output.json>`.
     * Set up file streams to read the `.form` source file and prepare an output stream for the JSON.
 
 ---

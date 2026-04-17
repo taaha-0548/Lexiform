@@ -67,6 +67,6 @@ std::string compileToSchema(const std::string& source) {
 }
 
 // Bindings
-EMSCRIPTEN_BINDINGS(formscript_module) {
+EMSCRIPTEN_BINDINGS(Lexiform_module) {
     function("compileToSchema", &compileToSchema);
 }

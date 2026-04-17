@@ -10,7 +10,7 @@ Lexiform allows you to define complex form structures, validation rules, and UI 
 
 *   **Custom DSL:** Define forms with a simple, keyword-based syntax.
 *   **High Performance:** C++ compiler for rapid translation and semantic analysis.
-*   **Shared Engine:** A cross-platform TypeScript library (`FormScriptEngine`) for real-time frontend validation.
+*   **Shared Engine:** A cross-platform TypeScript library (`LexiformEngine`) for real-time frontend validation.
 *   **Framework Agnostic:** Compiles to standard JSON that works with React, Vue, Angular, and more.
 *   **Semantic Validation:** Catches duplicate IDs and attribute mismatches at compile time.
 
@@ -19,7 +19,7 @@ Lexiform allows you to define complex form structures, validation rules, and UI 
 ## 🛠️ Monorepo Structure
 
 -   `src/`: Core C++ Compiler logic (Lexer, Parser, Semantic Analyzer).
--   `packages/formscript-js/`: The NPM package providing JS/TS bindings for the C++ core via WebAssembly.
+-   `packages/Lexiform-js/`: The NPM package providing JS/TS bindings for the C++ core via WebAssembly.
 -   `frontend/`: A React demo application (YouTube Studio clone) using the library.
 -   `include/`: C++ Header files.
 -   `tests/`: Test suites for both C++ and JS.
@@ -54,7 +54,7 @@ npm install lexiform
 
 ### 2. Usage with React
 ```tsx
-import { useFormScript } from 'lexiform';
+import { useLexiform } from 'lexiform';
 ```
 
 ---
@@ -70,7 +70,7 @@ const source = `
 `;
 
 function App() {
-  const { schema, isReady } = useFormScript(source);
+  const { schema, isReady } = useLexiform(source);
   if (!isReady) return <div>Loading C++ Engine...</div>;
   return <h1>{schema.title}</h1>;
 }
@@ -83,7 +83,7 @@ function App() {
 To publish the library to the NPM registry:
 
 1.  Rebuild the assets: `npm run build:wasm && npm run build:js`
-2.  Navigate to the package: `cd packages/formscript-js`
+2.  Navigate to the package: `cd packages/Lexiform-js`
 3.  Publish: `npm publish`
 
 ---
