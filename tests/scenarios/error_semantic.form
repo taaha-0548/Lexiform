@@ -1,0 +1,5 @@
+FORM "Invalid Form" invalid-001
+SECTION "Mixed-Up"
+    TEXT "Title" title [MAX_WORDS=10]
+SUBMIT "Error"
+END

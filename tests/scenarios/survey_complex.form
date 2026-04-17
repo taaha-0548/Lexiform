@@ -1,0 +1,9 @@
+FORM "User Survey" survey-2026
+SECTION "Experience"
+    TEXTAREA "Detailed Feedback" feedback [MAX_WORDS=100]
+    DROPDOWN "Rating" rating [REQUIRED, OPTIONS=["Excellent", "Good", "Fair", "Poor"]]
+SECTION "Demographics"
+    NUMBER "Age" age [MIN=13, MAX=120]
+    RADIO "Gender" gender [OPTIONS=["Male", "Female", "Non-binary", "Prefer not to say"]]
+SUBMIT "Submit Survey"
+END

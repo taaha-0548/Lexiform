@@ -1,0 +1,6 @@
+FORM "Contact Us" contact-form
+SECTION "Identity"
+    TEXT "Full Name" name [REQUIRED, PLACEHOLDER="Enter your name"]
+    EMAIL "Email" email [REQUIRED]
+SUBMIT "Send Message"
+END
