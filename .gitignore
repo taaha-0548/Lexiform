@@ -20,13 +20,10 @@ out/
 *.dylib
 *.dll
 
-# Emscripten / WASM Generated Files
-# We ignore the actual binaries but keep the folder structure
-packages/formscript-js/src/wasm/*.js
-packages/formscript-js/src/wasm/*.wasm
-
 # Package artifacts
 *.tgz
+mock-lexiform-app/
+.tmp/
 
 # IDE / System
 .vscode/

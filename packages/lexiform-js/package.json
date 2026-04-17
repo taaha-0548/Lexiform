@@ -1,6 +1,6 @@
 {
   "name": "lexiform",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Developer-first DSL for building and validating cross-platform forms.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -14,8 +14,7 @@
     }
   },
   "files": [
-    "dist",
-    "src/wasm"
+    "dist"
   ],
   "scripts": {
     "build:wasm": "cd ../../ && npm run build:wasm",

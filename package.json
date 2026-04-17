@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build:core": "cd build && cmake .. && cmake --build .",
-    "build:wasm": "mkdir -p packages/lexiform-js/src/wasm && cd build && emcmake cmake .. && emmake make && cp lexiform.{js,wasm} ../packages/lexiform-js/src/wasm/",
+    "build:wasm": "mkdir -p packages/lexiform-js/dist && cd build && emcmake cmake .. && emmake make && cp lexiform.{js,wasm} ../packages/lexiform-js/dist/",
     "build:js": "npm run build -w packages/lexiform-js",
     "build:frontend": "npm run build -w frontend",
     "build": "npm run build:wasm && npm run build:js && npm run build:frontend",

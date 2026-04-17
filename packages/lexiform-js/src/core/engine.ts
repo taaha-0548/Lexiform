@@ -21,7 +21,7 @@ export class LexiformEngine {
       } else {
         // Dynamic import for the pre-built WASM glue code
         // We use 'as any' to bypass TS check for missing file during dev
-        const moduleFactory = (await import('../wasm/lexiform.js' as any)).default;
+        const moduleFactory = (await import('./lexiform.js' as any)).default;
         wasmModuleInstance = await moduleFactory();
       }
       console.log("Lexiform C++ Engine (WASM) initialized successfully.");
