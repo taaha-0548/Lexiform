@@ -1,21 +1,21 @@
 # Lexiform JS Core
 
-The official JavaScript/TypeScript bindings for the **Lexiform C++ Core Compiler**. This library allows you to run the exact same, high-performance form validation and schema generation logic in the browser using WebAssembly.
+The official JavaScript/TypeScript bindings for the Lexiform C++ Core Compiler. This library allows you to run the exact same, high-performance form validation and schema generation logic in the browser using WebAssembly.
 
-## 🚀 Features
+## Features
 
 - **C++ Performance:** Uses the real C++ Lexer, Parser, and Semantic Analyzer.
-- **WASM Powered:** Compiled to WebAssembly for near-native speed.
+- **WebAssembly Powered:** Compiled to WebAssembly for near-native speed.
 - **Type Safe:** Full TypeScript support for Schemas and Data.
 - **React Ready:** Includes a specialized hook for seamless integration.
 
-## 📦 Installation
+## Installation
 
 ```bash
 npm install lexiform
 ```
 
-## 🛠️ Usage
+## Usage
 
 ### Using the React Hook
 
@@ -49,7 +49,7 @@ function App() {
 
 ### Direct Engine Usage
 
-For non-React environments, you can use the `LexiformEngine` directly.
+For non-React environments, you can use the LexiformEngine directly.
 
 ```typescript
 import { LexiformEngine } from 'lexiform';
@@ -66,14 +66,14 @@ async function compileForm() {
 }
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 This package bundles:
 1.  **TypeScript Distribution** (`dist/`): The high-level JS API.
-2.  **WebAssembly Binaries** (`src/wasm/`): The compiled C++ core.
+2.  **WebAssembly Binaries** (`dist/`): The compiled C++ core.
 
-When `initWasm()` is called, the library dynamically imports the `.wasm` binary and instantiates the C++ environment.
+When `initWasm()` is called, the library dynamically imports the WebAssembly binary and instantiates the C++ environment.
 
-## 📄 License
+## License
 
 MIT
