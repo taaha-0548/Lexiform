@@ -1,6 +1,6 @@
 {
   "name": "lexiform",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Developer-first DSL for building and validating cross-platform forms.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "build:wasm": "cd ../../ && npm run build:wasm",
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify",
+    "build": "tsup",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "lint": "eslint src/**/*.ts",
     "test": "vitest run"
