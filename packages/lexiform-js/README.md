@@ -1,34 +1,14 @@
-# Lexiform JS Core
-**A developer-first markup language for defining web forms.**
+# lexiform (JS/TS Library)
+**Official JavaScript and TypeScript bindings for the Lexiform C++ Core Compiler.**
 
-Lexiform treats form creation like document compilation. Instead of wrestling with slow drag-and-drop builders or writing error-prone JSON configurations by hand, you write clean, human-readable markup. The Lexiform compiler strictly enforces structural correctness, validates field semantics, and outputs a highly portable, framework-agnostic JSON schema ready to be rendered by React, Next.js, Vue, or plain HTML.
-
-### About this Package
-This package provides the official JavaScript and TypeScript bindings for the **Lexiform C++ Core Compiler**. By leveraging WebAssembly (WASM), it allows you to run the exact same high-performance parsing and semantic analysis logic directly in the browser or Node.js environment, with zero backend required.
-
-## Why Lexiform?
-
-Traditional form builders often force you to choose between human-readable definitions and complex validation logic. Lexiform bridges this gap by providing:
-- **Unified Logic:** Use the exact same C++ compiler engine for your CLI tools and your web browser.
-- **Extreme Performance:** Offload complex parsing and semantic analysis to WebAssembly with an ultra-lightweight, zero-dependency payload.
-- **Semantic Safety:** Catch errors (like duplicate IDs or invalid attribute combinations) *before* your form even renders.
-- **Zero Framework Lock-in:** The DSL compiles to a standard JSON schema that you can render however you like.
-
-### Real-World Use Cases
-
-- **Version-Controllable Form Definitions:** Unlike drag-and-drop builders, Lexiform `.form` files live directly in your Git repository. This makes forms **version-controllable, diffable, and code-review friendly**.
-- **Cross-Framework Portability:** Write a Job Application form once in Lexiform and render it across a React website, an Angular admin panel, or even a legacy HTML app.
-- **Rapid Prototyping:** For power users and engineers, writing a quick Lexiform script is significantly faster than dragging fields onto a GUI canvas.
-- **Safer than Raw JSON:** Stop hand-writing massive, error-prone JSON files. Lexiform replaces manual JSON with a clean markup language, while the compiler enforces strict semantic checks.
+This package allows you to run the Lexiform compiler directly in the browser or Node.js using WebAssembly. It provides a clean, type-safe API and a specialized React hook for seamless integration.
 
 ## Features
 
-**Keywords:** `Lexiform`, `DSL`, `Forms`, `Compiler`, `Validation`, `WebAssembly`, `WASM`, `React`, `TypeScript`
-
-- **C++ Performance:** Powered by the native C++ Lexer, Parser, and Semantic Analyzer.
-- **WebAssembly Powered:** Compiled to WebAssembly for near-native speed with a minimal footprint.
-- **Type Safe:** Full TypeScript support for Schemas and Data.
-- **React Ready:** Includes a specialized hook for seamless, asynchronous integration.
+- **C++ Performance:** Powered by the native Lexiform C++ Lexer, Parser, and Semantic Analyzer.
+- **WebAssembly Powered:** High-speed form compilation with 100% feature parity with the CLI tool.
+- **React Ready:** Includes the `useLexiform` hook for managing compiler state and form data.
+- **Zero Framework Lock-in:** Compiles to standard JSON schemas that can be rendered by any framework.
 
 ## Installation
 
@@ -38,13 +18,12 @@ npm install lexiform
 
 ## Usage
 
-### Using the React Hook
+### ⚛️ Using in React
 
-The easiest way to use Lexiform in a React application is the `useLexiform` hook. It handles the asynchronous loading of the WebAssembly module automatically.
+The `useLexiform` hook is the recommended way to use Lexiform in React. 
 
+#### Option A: Inline Strings
 ```tsx
-import { useLexiform } from 'lexiform';
-
 const source = `
   FORM "Newsletter" news-id
   SECTION "Subscriber Details"
@@ -52,93 +31,133 @@ const source = `
   SUBMIT "Join"
   END
 `;
+const { schema } = useLexiform(source);
+```
+
+#### Option B: Actual `.form` Files (Recommended)
+For professional projects, keep your markup in separate `.form` files. 
+
+**1. TypeScript Setup**
+Add Lexiform's client types to your `tsconfig.json` so your IDE recognizes `.form` files:
+```json
+{
+  "compilerOptions": {
+    "types": ["lexiform/client"]
+  }
+}
+```
+
+**2. Vite Setup**
+Configure Vite to treat `.form` files as raw text automatically:
+```typescript
+// vite.config.ts
+export default defineConfig({
+  assetsInclude: ['**/*.form']
+});
+```
+
+Now you can import them cleanly:
+```tsx
+import contactSource from './contact.form'; // No ?raw needed!
+```
+
+### React Implementation Example
+```tsx
+import { useLexiform } from 'lexiform';
+import source from './my-form.form?raw';
 
 function App() {
-  const { schema, isReady, compilerError } = useLexiform(source);
+  const { 
+    schema, 
+    isReady, 
+    compilerError, 
+    data, 
+    handleChange, 
+    validate, 
+    errors 
+  } = useLexiform(source);
 
   if (!isReady) return <div>Loading C++ Engine...</div>;
-  if (compilerError) return <div>Error: {compilerError}</div>;
+  if (compilerError) return <div>Compiler Error: {compilerError}</div>;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validate()) {
+      console.log("Form Submitted:", data);
+    }
+  };
 
   return (
-    <form>
-      <h1>{schema.title}</h1>
-      {schema.sections.map((section) => (
+    <form onSubmit={handleSubmit}>
+      <h1>{schema?.title}</h1>
+      {schema?.sections.map((section) => (
          <fieldset key={section.title}>
             <legend>{section.title}</legend>
             {section.fields.map((field) => (
-               <input
-                 key={field.id}
-                 type={field.type}
-                 placeholder={field.label}
-                 required={Boolean(field.REQUIRED)}
-               />
+               <div key={field.id}>
+                 <label>{field.label}</label>
+                 <input
+                   type={field.type}
+                   value={(data[field.id] as string) || ''}
+                   onChange={(e) => handleChange(field.id, e.target.value)}
+                   required={Boolean(field.REQUIRED)}
+                 />
+                 {errors[field.id] && <span style={{color: 'red'}}>{errors[field.id]}</span>}
+               </div>
             ))}
          </fieldset>
       ))}
-      <button type="submit">{schema.submit.label}</button>
+      <button type="submit">{schema?.submit.label}</button>
     </form>
   );
 }
 ```
 
-### Direct Engine Usage
+### 🚀 Direct Engine Usage (Node.js/Vanilla JS)
 
-For non-React environments (Node.js, Vue, Svelte, or Vanilla JS), you can use the `LexiformEngine` directly.
+For non-React environments, use the `LexiformEngine` directly.
 
 ```typescript
 import { LexiformEngine } from 'lexiform';
 
-async function compileForm(mySourceString: string) {
+async function runCompiler() {
   // 1. Initialize the WASM module
   await LexiformEngine.initWasm();
 
-  // 2. Parse the source string into a JSON Schema
-  const schema = LexiformEngine.parse(mySourceString);
-
-  // 3. Validate user data against the generated schema
-  const errors = LexiformEngine.validate(schema, { email: 'invalid-email' });
-  return { schema, errors };
+  // 2. Compile source markup to JSON Schema
+  try {
+    const schema = LexiformEngine.parse('FORM "Example" ex ...');
+    console.log("Generated Schema:", schema);
+    
+    // 3. Validate data at runtime
+    const errors = LexiformEngine.validate(schema, { some_field: "" });
+  } catch (err) {
+    console.error(err.message);
+  }
 }
 ```
 
-## Architecture & JS Module Usage
+## API Reference
 
-Lexiform JS is a hybrid package that bridges a TypeScript API with a high-performance C++ core. It consists of:
+### `useLexiform(source: string, moduleLoader?: () => Promise<any>)`
+Returns:
+- `schema`: The compiled `FormSchema` object.
+- `isReady`: Boolean indicating if WASM is loaded and parsing is complete.
+- `compilerError`: String containing any errors caught by the C++ analyzer.
+- `data`: Current form state object.
+- `errors`: Current validation errors.
+- `handleChange(id, value)`: Helper to update `data` state.
+- `validate()`: Runs JS-side validation against the schema.
+- `isValid`: Boolean indicating if there are currently validation errors.
 
-1. **TypeScript Distribution** (`dist/`): The high-level JS API you interact with.
-2. **JS Module Glue Code** (`lexiform.js`): An ES Module generated by Emscripten that manages the WASM lifecycle, memory, and function exports.
-3. **WebAssembly Binary** (`lexiform.wasm`): The compiled C++ core containing the Lexer, Parser, and Analyzer.
+### `LexiformEngine.initWasm(moduleLoader?)`
+Initializes the WASM environment. Must be called before `parse()`.
 
-### How it Works
+### `LexiformEngine.parse(source: string)`
+Calls the C++ core to tokenize, parse, and analyze the source. Returns a `FormSchema`.
 
-When `initWasm()` is called, the library dynamically imports the `lexiform.js` module. This module then fetches and instantiates the `lexiform.wasm` binary. All semantic analysis and form compilation is performed inside the WASM environment, ensuring parity with the C++ CLI tool.
-
-## Advanced: Custom WASM Loading
-
-If you are using a bundler that requires specific handling for WASM files (or if you want to host the WASM file on a custom CDN), you can provide a custom `moduleLoader`.
-
-```typescript
-import { LexiformEngine } from 'lexiform';
-import lexiformModuleFactory from 'lexiform/dist/lexiform.js';
-
-async function customInit() {
-  await LexiformEngine.initWasm(async () => {
-    // Manually initialize the Emscripten module factory
-    return await lexiformModuleFactory();
-  });
-}
-```
-
-This also works directly with the `useLexiform` hook:
-
-```tsx
-const { schema } = useLexiform(source, async () => {
-  return await lexiformModuleFactory();
-});
-```
-
-## NPM Registry
-View the official package here: https://www.npmjs.com/package/lexiform
+### `LexiformEngine.validate(schema, data)`
+Runs a fast JS-side validation of the provided data against the schema constraints.
 
 ## License
 

@@ -1,6 +1,6 @@
 {
   "name": "lexiform",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Developer-first DSL for building and validating cross-platform forms.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -12,7 +12,8 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./lexiform.js": "./dist/lexiform.js"
+    "./lexiform.js": "./dist/lexiform.js",
+    "./client": "./dist/client.d.ts"
   },
   "files": [
     "dist"

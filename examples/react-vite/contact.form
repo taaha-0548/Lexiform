@@ -1,0 +1,8 @@
+FORM "Contact Support" support-form
+SECTION "User Info"
+    TEXT "Name" user-name [REQUIRED, PLACEHOLDER="Your name"]
+    EMAIL "Email Address" user-email [REQUIRED]
+SECTION "Request Details"
+    TEXTAREA "Message" msg [REQUIRED, MAX_WORDS=100]
+SUBMIT "Send Request"
+END

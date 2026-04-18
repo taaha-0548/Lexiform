@@ -17,10 +17,10 @@ First off, thanks for taking the time to contribute! 🎉
 5.  **Important:** Run the test suites!
     *   Full suite: `npm test`
     *   Compiler tests: `node tests/test_runner.js`
-    *   Engine tests: `npm test -w packages/Lexiform-js`
-5.  Commit your changes (`git commit -m 'Add amazing feature'`).
-6.  Push to the branch (`git push origin feature/amazing-feature`).
-7.  Open a Pull Request.
+    *   Engine tests: `npm test -w packages/lexiform-js`
+6.  Commit your changes (`git commit -m 'Add amazing feature'`).
+7.  Push to the branch (`git push origin feature/amazing-feature`).
+8.  Open a Pull Request.
 
 ### 3. Code Standards
 *   **C++:** Follow a consistent style (similar to LLVM or Google style).
