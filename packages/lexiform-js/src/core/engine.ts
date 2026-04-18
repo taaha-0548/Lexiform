@@ -7,6 +7,13 @@ interface LexiformWasmModule {
 
 let wasmModuleInstance: LexiformWasmModule | null = null;
 
+/**
+ * Resolve the WASM URL at the module level.
+ * This ensures bundlers (Vite, Webpack) detect it as an asset reference
+ * and handle it correctly during pre-bundling and production builds.
+ */
+const wasmUrl = new URL('./lexiform.wasm', import.meta.url).href;
+
 export class LexiformEngine {
   /**
    * Initialize the WebAssembly module built from the C++ Core Compiler.
@@ -20,9 +27,17 @@ export class LexiformEngine {
         wasmModuleInstance = await moduleLoader();
       } else {
         // Dynamic import for the pre-built WASM glue code
-        // We use 'as any' to bypass TS check for missing file during dev
         const moduleFactory = (await import('./lexiform.js' as any)).default;
-        wasmModuleInstance = await moduleFactory();
+        
+        // Initialize the module with locateFile to use our resolved URL
+        wasmModuleInstance = await moduleFactory({
+          locateFile: (path: string) => {
+            if (path.endsWith('.wasm')) {
+              return wasmUrl;
+            }
+            return path;
+          }
+        });
       }
       console.log("Lexiform C++ Engine (WASM) initialized successfully.");
     } catch (e) {
