@@ -48,11 +48,16 @@ Add Lexiform's client types to your `tsconfig.json` so your IDE recognizes `.for
 ```
 
 **2. Vite Setup**
-Configure Vite to treat `.form` files as raw text automatically:
+To ensure WebAssembly loads correctly and to treat `.form` files as raw text, update your `vite.config.ts`:
+
 ```typescript
 // vite.config.ts
 export default defineConfig({
-  assetsInclude: ['**/*.form']
+  plugins: [react()],
+  optimizeDeps: {
+    exclude: ['lexiform'] // 🔴 CRITICAL: Prevents Vite from mangling WASM paths
+  },
+  assetsInclude: ['**/*.form'] // Allows importing .form files
 });
 ```
 
