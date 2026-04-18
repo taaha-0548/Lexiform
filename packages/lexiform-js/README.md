@@ -69,7 +69,7 @@ import contactSource from './contact.form'; // No ?raw needed!
 ### React Implementation Example
 ```tsx
 import { useLexiform } from 'lexiform';
-import source from './my-form.form?raw';
+import source from './my-form.form';
 
 function App() {
   const { 
