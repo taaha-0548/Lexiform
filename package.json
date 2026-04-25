@@ -3,7 +3,9 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "frontend"
+    "frontend",
+    "examples/react-vite",
+    "examples/youtube-upload"
   ],
   "scripts": {
     "build:core": "cd build && cmake .. && cmake --build .",

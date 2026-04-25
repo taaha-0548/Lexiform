@@ -1,0 +1,18 @@
+{
+  "name": "lexiform-example-youtube-upload",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite"
+  },
+  "dependencies": {
+    "lexiform": "file:../../packages/lexiform-js",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.4"
+  }
+}

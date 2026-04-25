@@ -1,0 +1,16 @@
+FORM "Upload Video" youtube-upload
+
+SECTION "Details"
+    TEXT "Title (required)" video-title [REQUIRED, PLACEHOLDER="Add a title that describes your video"]
+    TEXTAREA "Description" video-desc [MAX_WORDS=5000, PLACEHOLDER="Tell viewers about your video"]
+    DROPDOWN "Thumbnail" thumbnail-type [OPTIONS=["Upload Thumbnail", "Auto-generated 1", "Auto-generated 2"]]
+
+SECTION "Audience"
+    RADIO "Is this video made for kids?" made-for-kids [REQUIRED, OPTIONS=["Yes, it's made for kids", "No, it's not made for kids"]]
+    CHECKBOX "Age restriction (advanced)" age-restrict [OPTIONS=["Restrict my video to viewers over 18", "Do not restrict my video to viewers over 18"]]
+
+SECTION "Visibility"
+    RADIO "Save or publish" visibility [REQUIRED, OPTIONS=["Private", "Unlisted", "Public"]]
+
+SUBMIT "Publish"
+END

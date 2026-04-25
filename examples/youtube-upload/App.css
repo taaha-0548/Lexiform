@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: "Roboto", "Arial", sans-serif;
+  background-color: #f9f9f9;
+  color: #0f0f0f;
+}
+.yt-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.yt-header {
+  background: white;
+  padding: 0 20px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.yt-logo {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+.yt-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #065fd4;
+}
+.yt-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.yt-dialog {
+  background: white;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.yt-dialog-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.yt-dialog-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+.yt-dialog-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+.yt-section {
+  margin-bottom: 32px;
+}
+.yt-section h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #606060;
+}
+.yt-field {
+  margin-bottom: 24px;
+}
+.yt-label {
+  display: block;
+  font-size: 13px;
+  color: #606060;
+  margin-bottom: 8px;
+}
+input[type="text"], input[type="email"], textarea, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
+  border-color: #065fd4;
+  outline: none;
+}
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+.yt-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.yt-radio, .yt-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+.yt-error {
+  color: #cc0000;
+  font-size: 12px;
+  margin-top: 6px;
+}
+.yt-dialog-footer {
+  padding: 16px 24px;
+  border-top: 1px solid #e5e5e5;
+  display: flex;
+  justify-content: flex-end;
+}
+.yt-btn-primary {
+  background: #065fd4;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 2px;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+.yt-btn-primary:hover {
+  background: #0056b3;
+}
+.loading, .error {
+  padding: 40px;
+  text-align: center;
+  font-size: 16px;
+}
+.error {
+  color: #cc0000;
+}
