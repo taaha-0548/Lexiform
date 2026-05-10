@@ -1,3 +1,23 @@
+// ============================================================================
+// Phase 2: Syntax Analysis (The Parser)
+// ============================================================================
+// The Parser is the second phase of the compiler pipeline. It consumes the
+// token stream produced by the Lexer and validates it against the Lexiform
+// grammar, building an Abstract Syntax Tree (AST) in the process.
+//
+// Implementation: Recursive Descent (Top-Down Parsing)
+//   - Each grammar rule maps to a function: parseForm(), parseSection(), etc.
+//   - The parser uses a single token of lookahead via peek().
+//   - Error recovery is done via exceptions (std::runtime_error).
+//
+// Grammar handled (simplified):
+//   Form    -> FORM STRING ID Section+ SUBMIT STRING END
+//   Section -> SECTION STRING Field+
+//   Field   -> FieldType STRING ID [ '[' AttrList ']' ]
+//   AttrList-> Attr (',' Attr)*
+//   Attr    -> NAME [ '=' Value ]
+// ============================================================================
+
 #include "Parser.hpp"
 #include <iostream>
 
@@ -27,10 +47,12 @@ bool Parser::match(FSTokenType type) {
     return false;
 }
 
+// Entry point for parsing — begins the recursive descent from the top rule
 FormNode Parser::parse() {
     return parseForm();
 }
 
+// Parse the top-level FORM rule: FORM "title" id <sections> SUBMIT "label" END
 FormNode Parser::parseForm() {
     expect(FSTokenType::FORM, "Expected 'FORM'");
     std::string title = expect(FSTokenType::STRING_LITERAL, "Expected form title (string)").value;
@@ -50,6 +72,8 @@ FormNode Parser::parseForm() {
     return {title, id, sections, submitLabel};
 }
 
+// Parse a SECTION: SECTION "title" <fields>
+// Each section must contain at least one field
 SectionNode Parser::parseSection() {
     expect(FSTokenType::SECTION, "Expected 'SECTION'");
     std::string title = expect(FSTokenType::STRING_LITERAL, "Expected section title (string)").value;
@@ -63,6 +87,7 @@ SectionNode Parser::parseSection() {
     return {title, fields};
 }
 
+// Map token types to AST field types (direct 1:1 mapping)
 static FieldType toFieldType(FSTokenType type) {
     switch (type) {
         case FSTokenType::TEXT: return FieldType::TEXT;
@@ -79,6 +104,7 @@ static FieldType toFieldType(FSTokenType type) {
     }
 }
 
+// Parse a single field: <FieldType> "label" id ['[' attrs ']']
 FieldNode Parser::parseField() {
     FSTokenType type = consume().type;
     std::string label = expect(FSTokenType::STRING_LITERAL, "Expected field label (string)").value;

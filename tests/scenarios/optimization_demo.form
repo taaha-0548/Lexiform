@@ -1,0 +1,8 @@
+FORM "Optimization Demo" opt-demo
+SECTION "Inputs"
+    TEXT "Username" username [REQUIRED, PLACEHOLDER="Enter username", PLACEHOLDER="Your name"]
+    TEXTAREA "Bio" bio [MAX_WORDS=200, PLACEHOLDER="Tell us about yourself"]
+    CHECKBOX "Preferences" prefs [OPTIONS=["Dark Mode", "Notifications"], PLACEHOLDER="Ignored"]
+    NUMBER "Age" age [MIN=13, MAX=120, REQUIRED]
+SUBMIT "Save Profile"
+END

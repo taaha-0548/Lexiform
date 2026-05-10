@@ -1,8 +1,33 @@
+// ============================================================================
+// Phase 1: Lexical Analysis (The Scanner)
+// ============================================================================
+// The Lexer (also called a Scanner or Tokenizer) is the first phase of the
+// compiler pipeline. It reads the raw character stream from the .form source
+// file and converts it into a sequence of tokens (FSToken objects).
+//
+// Implementation: Hand-coded Finite Automaton
+//   - No external lexer generators (flex/lex) are used.
+//   - The automaton is implemented via the peek()/consume() interface.
+//   - Keywords are recognized by first reading an identifier, then checking
+//     it against a static keyword table (KEYWORDS map).
+//
+// Token categories produced:
+//   1. Structure keywords: FORM, SECTION, SUBMIT, END
+//   2. Field type keywords: TEXT, EMAIL, PHONE, NUMBER, DATE, etc.
+//   3. Attribute keywords: REQUIRED, PLACEHOLDER, OPTIONS, MIN, MAX, etc.
+//   4. Literals: STRING_LITERAL ("..."), NUMBER_LITERAL (digits), IDENTIFIER
+//   5. Symbols: EQUALS (=), LBRACKET ([), RBRACKET (]), COMMA (,)
+//   6. Special: EOF_TOKEN (end of input)
+// ============================================================================
+
 #include "Lexer.hpp"
 #include <cctype>
 #include <unordered_map>
 #include <iostream>
 
+// Keyword lookup table: maps uppercase keyword strings to their token types.
+// This implements the "reserved words" recognition strategy — identifiers are
+// first read as generic strings, then looked up in this table.
 static const std::unordered_map<std::string, FSTokenType> KEYWORDS = {
     {"FORM", FSTokenType::FORM},
     {"SECTION", FSTokenType::SECTION},
@@ -89,6 +114,9 @@ FSToken Lexer::readNumber() {
     return {FSTokenType::NUMBER_LITERAL, val, start_line, start_col};
 }
 
+// Main tokenization loop — implements the DFA's transition logic.
+// Reads one character at a time via peek(), decides which token-reading
+// function to call based on the first character (the "lookahead").
 std::vector<FSToken> Lexer::tokenize() {
     std::vector<FSToken> tokens;
     while (true) {

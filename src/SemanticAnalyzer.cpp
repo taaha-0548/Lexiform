@@ -1,3 +1,22 @@
+// ============================================================================
+// Phase 3: Semantic Analysis (The "Brain")
+// ============================================================================
+// The Semantic Analyzer is the third phase of the compiler pipeline. It
+// traverses the AST produced by the Parser and enforces context-sensitive
+// rules that cannot be expressed in a context-free grammar.
+//
+// Implementation: AST Tree Traversal with Symbol Table
+//   - Symbol Table: an unordered_map<string, string> mapping IDs to their
+//     context type ("FORM" or "FIELD"). Used for uniqueness checking.
+//   - Type Checking: validates that attributes are only applied to compatible
+//     field types (e.g., MAX_WORDS only on TEXTAREA).
+//   - Completeness: ensures mandatory attributes are present (e.g., OPTIONS
+//     on DROPDOWN/RADIO fields).
+//
+// Errors are reported as exceptions with descriptive messages including the
+// offending field ID and the violated rule.
+// ============================================================================
+
 #include "SemanticAnalyzer.hpp"
 #include <iostream>
 

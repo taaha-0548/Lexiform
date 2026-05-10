@@ -12,6 +12,8 @@ set(CORE_SOURCES
     src/Parser.cpp 
     src/SemanticAnalyzer.cpp 
     src/AST.cpp
+    src/IRGenerator.cpp
+    src/Optimizer.cpp
 )
 
 if (EMSCRIPTEN)
