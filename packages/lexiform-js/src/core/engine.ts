@@ -3,6 +3,7 @@ import { FormSchema, FormDataValue } from './types';
 // Declare the Emscripten module interface
 interface LexiformWasmModule {
   compileToSchema: (source: string) => string;
+  compileWithStages: (source: string) => string;
 }
 
 let wasmModuleInstance: LexiformWasmModule | null = null;
@@ -21,14 +22,14 @@ export class LexiformEngine {
    */
   static async initWasm(moduleLoader?: () => Promise<any>): Promise<void> {
     if (wasmModuleInstance) return;
-    
+
     try {
       if (moduleLoader) {
         wasmModuleInstance = await moduleLoader();
       } else {
         // Dynamic import for the pre-built WASM glue code
         const moduleFactory = (await import('./lexiform.js' as any)).default;
-        
+
         // Initialize the module with locateFile to use our resolved URL
         wasmModuleInstance = await moduleFactory({
           locateFile: (path: string) => {
@@ -40,6 +41,7 @@ export class LexiformEngine {
         });
       }
       console.log("Lexiform C++ Engine (WASM) initialized successfully.");
+      console.log("Available functions:", Object.keys(wasmModuleInstance!).filter(key => typeof (wasmModuleInstance as any)[key] === 'function'));
     } catch (e) {
       console.error("CRITICAL: Failed to load Lexiform C++ WebAssembly module.", e);
       console.error("Ensure that 'lexiform.wasm' is available in the same directory as the JS bundle.");
@@ -65,6 +67,24 @@ export class LexiformEngine {
     }
 
     return parsed as FormSchema;
+  }
+
+  /**
+   * Get all compilation stages with intermediate representations
+   */
+  static getCompilerStages(source: string): any {
+    if (!wasmModuleInstance) {
+      throw new Error("LexiformEngine not initialized. Call initWasm() first.");
+    }
+
+    const jsonString = wasmModuleInstance.compileWithStages(source);
+    const stages = JSON.parse(jsonString);
+
+    if (!stages.success) {
+      throw new Error(`Compiler Error: ${stages.error}`);
+    }
+
+    return stages;
   }
 
   /**

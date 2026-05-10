@@ -1,0 +1,78 @@
+{
+    "id": "youtube-upload",
+    "sections": [
+        {
+            "fields": [
+                {
+                    "PLACEHOLDER": "Add a title that describes your video",
+                    "REQUIRED": true,
+                    "id": "video-title",
+                    "label": "Title (required)",
+                    "type": "text"
+                },
+                {
+                    "MAX_WORDS": 5000,
+                    "PLACEHOLDER": "Tell viewers about your video",
+                    "id": "video-desc",
+                    "label": "Description",
+                    "type": "textarea"
+                },
+                {
+                    "OPTIONS": [
+                        "Upload Thumbnail",
+                        "Auto-generated 1",
+                        "Auto-generated 2"
+                    ],
+                    "id": "thumbnail-type",
+                    "label": "Thumbnail",
+                    "type": "dropdown"
+                }
+            ],
+            "title": "Details"
+        },
+        {
+            "fields": [
+                {
+                    "OPTIONS": [
+                        "Yes, it's made for kids",
+                        "No, it's not made for kids"
+                    ],
+                    "REQUIRED": true,
+                    "id": "made-for-kids",
+                    "label": "Is this video made for kids?",
+                    "type": "radio"
+                },
+                {
+                    "OPTIONS": [
+                        "Restrict my video to viewers over 18",
+                        "Do not restrict my video to viewers over 18"
+                    ],
+                    "id": "age-restrict",
+                    "label": "Age restriction (advanced)",
+                    "type": "checkbox"
+                }
+            ],
+            "title": "Audience"
+        },
+        {
+            "fields": [
+                {
+                    "OPTIONS": [
+                        "Private",
+                        "Unlisted",
+                        "Public"
+                    ],
+                    "REQUIRED": true,
+                    "id": "visibility",
+                    "label": "Save or publish",
+                    "type": "radio"
+                }
+            ],
+            "title": "Visibility"
+        }
+    ],
+    "submit": {
+        "label": "Publish"
+    },
+    "title": "Upload Video"
+}
