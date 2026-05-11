@@ -1,6 +1,6 @@
 {
   "name": "lexiform",
-  "version": "1.0.8",
+  "version": "1.0.3",
   "description": "Developer-first DSL for building and validating cross-platform forms.",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -12,18 +12,14 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./lexiform.js": "./dist/lexiform.js",
-    "./lexiform.wasm": "./dist/lexiform.wasm",
-    "./client": {
-      "types": "./dist/client.d.ts"
-    }
+    "./lexiform.js": "./dist/lexiform.js"
   },
   "files": [
     "dist"
   ],
   "scripts": {
     "build:wasm": "cd ../../ && npm run build:wasm",
-    "build": "tsup",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --minify",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "lint": "eslint src/**/*.ts",
     "test": "vitest run"

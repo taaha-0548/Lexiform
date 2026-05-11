@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "lexiform": "^1.0.7",
-    "lexiform-published": "npm:lexiform@1.0.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

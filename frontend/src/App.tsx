@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
-import { LexiformEngine } from 'lexiform-published'
+import { LexiformEngine } from 'lexiform'
 import { CompilerStages } from './CompilerStages'
 
 type SchemaField = {

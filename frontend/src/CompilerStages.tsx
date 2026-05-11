@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { LexiformEngine } from 'lexiform-published'
+import { LexiformEngine } from 'lexiform'
 import './CompilerStages.css'
 
 // Type definitions
@@ -342,9 +342,38 @@ export function CompilerStages({ source, onFinalSchema }: CompilerStagesProps) {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState('')
     const [expandedStage, setExpandedStage] = useState<number | null>(0)
+    const [isEngineReady, setIsEngineReady] = useState(false)
+
+    useEffect(() => {
+        let cancelled = false
+
+        const initializeEngine = async () => {
+            try {
+                await LexiformEngine.initWasm()
+                if (!cancelled) {
+                    setIsEngineReady(true)
+                }
+            } catch (err) {
+                if (!cancelled) {
+                    setError(err instanceof Error ? err.message : 'Lexiform WASM initialization failed')
+                    setLoading(false)
+                }
+            }
+        }
+
+        initializeEngine()
+
+        return () => {
+            cancelled = true
+        }
+    }, [])
 
     useEffect(() => {
         const runCompilation = async () => {
+            if (!isEngineReady) {
+                return
+            }
+
             if (!source.trim()) {
                 setStages([])
                 setLoading(false)
@@ -482,7 +511,7 @@ export function CompilerStages({ source, onFinalSchema }: CompilerStagesProps) {
         }
 
         runCompilation()
-    }, [source, onFinalSchema])
+    }, [source, onFinalSchema, isEngineReady])
 
     if (loading) {
         return (
